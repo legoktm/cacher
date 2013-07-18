@@ -46,7 +46,7 @@ class Pickler:
         with open(self.filename, 'w') as f:
             pickle.dump(self.d, f)
 
-    def set(self, key, value):
+    def set(self, key, value, *args):
         self.d[key] = value
         self.save()
 
