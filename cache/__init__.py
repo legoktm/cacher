@@ -22,7 +22,6 @@ IN THE SOFTWARE.
 """
 
 backends = ['redis', 'memcached', 'json', 'pickle']  # Supported backends.
-import jsonr
 try:
     import memcache
 except ImportError:
@@ -31,7 +30,9 @@ try:
     import redis
 except ImportError:
     redis = False
-import pickler
+
+from . import jsonr
+from . import pickler
 
 
 class Cache:
