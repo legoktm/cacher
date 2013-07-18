@@ -60,6 +60,9 @@ class Cache:
         if not hasattr(self, 'backend'):
             raise ValueError("You must provide a supported backend.")
 
+    def __repr__(self):
+        return "Cache(backend={0})".format(self.type)
+
     def set(self, key, value, *args):
         self.backend.set(key, value, *args)
 
