@@ -22,6 +22,9 @@ IN THE SOFTWARE.
 """
 
 backends = ['redis', 'memcached', 'json', 'pickle']  # Supported backends.
+import hashlib
+import os
+
 try:
     import memcache
 except ImportError:
@@ -44,6 +47,7 @@ class Cache:
             self.type = guess_backend()
         host = kw.get('host', '127.0.0.1')
         filename = kw.get('filename', 'cache')
+        self.prefix = hashlib.md5(os.environ['USER']).hexdigest() + kw.get('prefix', '')
         if self.type in ['memcache', 'memcached']:
             if not memcache:
                 raise ImportError
@@ -63,13 +67,19 @@ class Cache:
     def __repr__(self):
         return "Cache(backend={0})".format(self.type)
 
+    def normalize_key(self, key):
+        return self.prefix + key
+
     def set(self, key, value, *args):
+        key = self.normalize_key(key)
         self.backend.set(key, value, *args)
 
     def get(self, key):
+        key = self.normalize_key(key)
         return self.backend.get(key)
 
     def delete(self, key):
+        key = self.normalize_key(key)
         self.backend.delete(key)
 
     def __contains__(self, key):
@@ -77,6 +87,7 @@ class Cache:
         Not all backends will have a __contains__
         method, so we might need to improvise.
         """
+        key = self.normalize_key(key)
         if hasattr(self.backend, '__contains__'):
             return key in self.backend
 
