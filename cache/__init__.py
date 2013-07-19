@@ -40,7 +40,6 @@ from . import pickler
 
 class Cache:
     def __init__(self, **kw):
-        print kw['backend']
         if 'backend' in kw:
             self.type = kw['backend'].lower()
         else:
