@@ -2,7 +2,7 @@ from setuptools import setup
 import sys
 
 depends = ['redis']
-if sys.version[0] == 2:
+if sys.version[0] == '2':
     depends.append('python-memcached')
 
 setup(
